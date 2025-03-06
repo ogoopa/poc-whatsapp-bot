@@ -1,5 +1,6 @@
 const qrcode = require("qrcode-terminal");
 const { Client, LocalAuth } = require("whatsapp-web.js");
+const create = require("./gusBot.js");
 
 const client = new Client({
   authStrategy: new LocalAuth({
@@ -21,15 +22,12 @@ client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
-// // Listening to all incoming messages
-// client.on("message_create", (message) => {
-//   console.log(message.body);
-// });
-
-client.on("message_create", (message) => {
-  if (message.body === "!ping") {
-    // send back "pong" to the chat the message was sent in
-    client.sendMessage(message.from, "pong");
+client.on("message_create", async (message) => {
+  if (message.body.startsWith("hey goopa, ")) {
+    // Verifica se começa com "hey goopa, "
+    const prompt = message.body.replace(/^hey goopa, /, ""); // Remove "hey goopa, "
+    const data = await create(prompt);
+    await client.sendMessage(message.from, data);
   }
 });
 
