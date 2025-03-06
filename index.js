@@ -1,8 +1,14 @@
-const { Client } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
+const { Client, LocalAuth } = require("whatsapp-web.js");
 
-// Create a new client instance
-const client = new Client();
+const client = new Client({
+  authStrategy: new LocalAuth({
+    dataPath: "testGus",
+  }),
+  //   puppeteer: {
+  //     args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  //   },
+});
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
